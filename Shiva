@@ -1,0 +1,882 @@
+-:DriverSETUP:-
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class driversetup {
+	
+	String url="https://www.goindigo.com";
+	WebDriver driver;
+	public WebDriver chromesetup() {
+		
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\ADMIN\\Downloads\\chromedriver (1).exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		driver.manage().deleteAllCookies();
+		return driver;
+	}
+
+}
+------------------------------------------------
+ExcelCODE:--
+
+import java.io.FileInputStream;
+
+import java.io.FileNotFoundException;
+
+import java.io.FileOutputStream;
+
+import java.io.IOException;
+
+
+
+import org.apache.poi.ss.usermodel.Cell;
+
+import org.apache.poi.ss.usermodel.Row;
+
+import org.apache.poi.xslf.usermodel.XSLFSheet;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
+
+public class excelsetup {
+
+
+
+
+
+ public static String getcellvalue(String sheetname, int rownum, int colnum) throws IOException {
+
+ // TODO Auto-generated method stub
+
+ String cellvalue = null;
+
+ try {
+
+ FileInputStream file;
+
+
+
+  file = new FileInputStream("C:\\Users\\ADMIN\\eclipse-workspace\\Goobe\\javaSe\\ram.xlsx");
+
+
+
+ XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+ XSSFSheet sheet = workbook.getSheet(sheetname);
+
+ XSSFRow row = sheet.getRow(rownum);
+
+ XSSFCell cell = row.getCell(colnum);
+
+ cellvalue = cell.getStringCellValue();
+
+
+
+
+
+ }
+
+ catch (FileNotFoundException e) {
+
+  // TODO Auto-generated catch block
+
+  e.printStackTrace();
+
+ }
+
+ return cellvalue;
+
+
+
+
+
+ }
+
+
+
+ public static void setcellvalue(String sheetname ,String[] a) throws IOException {
+
+ // TODO Auto-generated method stub
+
+ //String Sheet2 = null ;
+
+ FileInputStream file;
+
+
+
+file = new FileInputStream("C:\\Users\\ADMIN\\eclipse-workspace\\Goobe\\javaSe\\ram.xlsx");
+
+
+
+ XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+ XSSFSheet sheet = workbook.getSheet(sheetname);
+
+ int lastrow = sheet.getLastRowNum();
+
+ for(int i=0; i<a.length; i++)
+
+ {
+
+  Row row = sheet.createRow(i);
+
+  Cell cell = row.createCell(1);
+
+  cell.setCellValue(a[i]);
+
+
+
+
+
+ }
+
+ FileOutputStream fos = new FileOutputStream("C:\\Users\\ADMIN\\eclipse-workspace\\Goobe\\javaSe\\ram.xlsx");
+
+ workbook.write(fos);
+
+ fos.close();
+
+ }
+
+
+
+
+
+
+
+}
+
+---------------------------------------------------------
+GOINDIGO:__
+package sba;
+
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeTest;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+
+public class Testagain extends driversetup {
+
+	 WebDriver driver;
+
+		
+
+	 @BeforeMethod
+
+	  public void beforeMethod() {
+
+	  driver = chromesetup();
+
+	  driver.manage().window().maximize();
+
+	  }
+
+	  
+
+	 @Test
+
+	 public void f() throws IOException, InterruptedException {
+
+	  WebElement roundtrip = driver.findElement(By.xpath("//*[text()='Round Trip']"));
+
+	  JavascriptExecutor js = (JavascriptExecutor)driver;
+
+	  js.executeScript("arguments[0].click();",roundtrip);
+
+	  WebElement from = driver.findElement(By.xpath("//input[@placeholder='From' and @name='or-src']"));
+
+	  from.click();
+
+	  //from.clear();
+
+	  Thread.sleep(2000);
+
+	  String fr = excelsetup.getcellvalue("Sheet1",0,0);
+
+	  from.sendKeys(fr);
+
+	  //js.executeScript("arguments[0].value = '"+fr+"';", from);
+
+	  Thread.sleep(2000);
+
+	  from.sendKeys(Keys.ENTER);
+
+	  
+
+	  WebElement dest = driver.findElement(By.xpath("//input[@placeholder='To' and @name='or-dest']"));
+
+	  //dest.click();
+
+	  String dt = excelsetup.getcellvalue("Sheet1",0,1);
+
+	  dest.sendKeys(dt);
+
+	  //js.executeScript("arguments[0].value = '"+dt+"';", dest);
+
+	  Thread.sleep(5000);
+
+	  dest.sendKeys(Keys.ENTER);
+
+	  Thread.sleep(2000);
+
+	  driver.findElement(By.xpath("//input[@name='or-depart' and @data-parsley-required='true']"));
+
+	  
+
+	  js.executeScript("window.scrollBy(0,200)");
+
+	  Thread.sleep(2000);
+
+	  driver.findElement(By.xpath("//*[@data-month='11']//a[text()='29']")).click();
+	  
+
+	  
+
+	  driver.findElement(By.xpath("//input[@name='or-return' and @data-parsley-flightreturndate='true']")).click();
+
+	  driver.findElement(By.xpath("//*[@data-month='0']//a[text()='8']")).click();
+
+	  driver.findElement(By.name("passenger")).click();
+
+	  List<WebElement> list = driver.findElements(By.xpath("//*[@class='icon-plus']"));
+
+	  list.get(0).click();
+
+	  driver.findElement(By.xpath("//*[@class='passenger-done-blck']//*[text()='Done']")).click();
+
+	  driver.findElement(By.xpath("//*[@type='submit']//*[text()='Search Flight']")).click();
+
+	  
+
+	  
+
+	  
+
+	  
+
+	  
+
+	 }
+
+	  
+
+	 @AfterMethod
+
+	 public void afterMethod() {
+
+	  driver.quit();
+
+	 }
+
+	}
+
+-----------------------------------
+package cleartrip;
+
+import org.testng.annotations.Test;
+
+
+
+//import goindigo.pom.excelsetup;
+
+
+
+import org.testng.annotations.BeforeTest;
+
+import java.io.IOException;
+
+import java.util.List;
+
+
+
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.Keys;
+
+import org.openqa.selenium.WebDriver;
+
+import org.openqa.selenium.WebElement;
+
+import org.testng.annotations.AfterTest;
+
+public class testng extends driversetup {
+
+  WebDriver driver;
+
+  
+
+  @BeforeTest
+
+  public void beforeTest() {
+
+    
+
+   driver=chromesetup();
+
+   driver.manage().window().maximize();
+
+  }
+
+  @Test
+
+  public void f() throws IOException, InterruptedException {
+
+    
+
+     
+
+ String dt = excelsetup.getcellvalue("Sheet1",0,0);
+
+ String dt1 = excelsetup.getcellvalue("Sheet1",0,1);
+
+    driver.findElement(By.xpath("(//input[@class='tripType'])[2]")).click();
+
+    Thread.sleep(2000);
+
+    WebElement txt= driver.findElement(By.xpath("//input[@id = 'FromTag']"));
+
+    txt.sendKeys(dt);
+
+    Thread.sleep(5000);
+
+    txt.sendKeys(Keys.ARROW_DOWN);
+
+    txt.sendKeys(Keys.ENTER);
+
+    Thread.sleep(5000);
+
+    txt =driver.findElement(By.xpath("//input[@id = 'ToTag']"));
+
+    txt.sendKeys(dt1);
+
+    Thread.sleep(5000);
+
+    txt.sendKeys(Keys.ARROW_DOWN);
+
+    txt.sendKeys(Keys.ENTER);
+
+    Thread.sleep(4000);
+
+    List <WebElement> ls=driver.findElements(By.xpath("(//table[@class='calendar'])[1]//td")) ;
+
+    for(WebElement d1:ls){
+
+      String date=d1.getText();
+
+      if(date.equals("17")){
+
+        d1.click();
+
+        break;
+
+      }
+
+    }
+
+    Thread.sleep(2000);
+
+    List<WebElement> ls1=driver.findElements(By.xpath("(//table[@class='calendar'])[2]//td"));
+
+    for(WebElement d2:ls1){
+
+      String date1=d2.getText();
+
+      if(date1.equals("25")){
+
+        d2.click();
+
+        break;
+
+      }
+
+    }
+
+    Thread.sleep(2000);
+
+    driver.findElement(By.xpath("//input[@class='booking large']")).click();
+
+  }
+
+  @AfterTest
+
+  public void afterTest() {
+
+   driver.quit();
+
+
+
+  }
+
+}
+
+
+
+
+
+******************************************************************************************************************************************************************************************
+ICICBANK
+
+package icicbank;
+
+
+
+import org.testng.annotations.Test;
+
+import org.testng.annotations.BeforeTest;
+
+
+
+import java.io.IOException;
+
+
+
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.JavascriptExecutor;
+
+import org.openqa.selenium.WebDriver;
+
+import org.openqa.selenium.WebElement;
+
+import org.openqa.selenium.support.ui.Select;
+
+import org.testng.annotations.AfterTest;
+
+
+
+public class testing extends dricersetup{
+
+ WebDriver driver;
+
+ @Test
+
+ public void icici() throws InterruptedException, IOException {
+
+  
+
+  //Selecting quarterly payout in drop down
+
+ driver.switchTo().frame("paymframe");
+
+  JavascriptExecutor js=(JavascriptExecutor)driver;
+
+  js.executeScript("window.scrollBy(0,200)");
+
+  WebElement deposit=driver.findElement(By.id("ddlTypeOfFixedDeposit"));
+
+  deposit.click();
+
+  Thread.sleep(1000);
+
+  Select sel=new Select(deposit);
+
+  sel.selectByVisibleText("Quarterly Payout");
+
+  Thread.sleep(1000);
+
+  
+
+  //amount=60000
+
+  WebElement amt=driver.findElement(By.xpath("//*[@id='loanAmount']"));
+
+  amt.clear();
+
+  Thread.sleep(1000);
+
+  amt.sendKeys("60000");
+
+  
+
+  //print maturity and agg value
+
+  String Maturity1=driver.findElement(By.id("spnMaturityValue")).getText();
+
+  String agg1=driver.findElement(By.xpath("//*[@id='spnAIAmount']")).getText();
+
+  System.out.println("Maturity value ="+Maturity1+" Aggregate value= "+agg1);
+
+  Thread.sleep(2000);
+
+  
+
+  
+
+  
+
+  //select tenure radio button
+
+  js.executeScript("window.scrollBy(0,200)");
+
+ driver.findElement(By.xpath("//*[@id='idDays']")).click();
+
+ Thread.sleep(1000);
+
+	
+
+ //enter days=1000
+
+ WebElement days=driver.findElement(By.xpath("//*[@id='tenureDay']"));
+
+ days.clear();
+
+ days.sendKeys("1000");
+
+ Thread.sleep(1000);
+
+	
+
+ //print maturity and agg value
+
+ String Maturity2=driver.findElement(By.id("spnMaturityValue")).getText();
+
+  String agg2=driver.findElement(By.xpath("//*[@id='spnAIAmount']")).getText();
+
+  System.out.println("Maturity value ="+Maturity2+" Aggregate value= "+agg2);
+
+  Thread.sleep(2000);
+
+ // excelcode.setcellvalue("Sheet2", Maturity1, agg1, Maturity2, agg2);
+
+  
+
+  driver.switchTo().parentFrame();
+
+  Thread.sleep(1000);
+
+    driver.findElement(By.xpath("//a[@class='Logo']"));
+
+    Thread.sleep(10000);
+
+  
+
+ }
+
+ @BeforeTest
+
+ public void beforeTest() {
+
+  driver=chromesetup();
+
+  driver.manage().window().maximize();
+
+ }
+
+
+
+ @AfterTest
+
+ public void afterTest() {
+
+  driver.quit();
+
+ }
+
+
+
+}
+
+**********************************************************************************************************************************************************************************************************
+package marshall;
+
+
+
+import org.testng.annotations.Test;
+
+import org.testng.annotations.BeforeTest;
+
+
+
+import java.io.IOException;
+
+
+
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.JavascriptExecutor;
+
+import org.openqa.selenium.WebDriver;
+
+import org.testng.annotations.AfterTest;
+
+
+
+public class marshall extends driverclass{
+
+ WebDriver driver;
+
+ @Test
+
+ public void f() throws InterruptedException, IOException {
+
+  //click on dog
+
+  driver.findElement(By.xpath("//*[@id='cbp-hrmenu-tab-20']")).click();
+
+  Thread.sleep(1000);
+
+  
+
+  //sub category=toys
+
+  driver.findElement(By.xpath("//*[@class='category-sub-menu']//a[text()='Toys']")).click();
+
+  Thread.sleep(1000);
+
+  
+
+  //click on second product
+
+  JavascriptExecutor js=(JavascriptExecutor)driver;
+
+  js.executeScript("window.scrollBy(0,1000)");
+
+  driver.findElement(By.xpath("//*[@class='product-description']//*[text()='N & D Low Grain starter puppy 800 gm']")).click();
+
+  Thread.sleep(1000);
+
+  
+
+  //Proceed add to cart and checkout
+
+  driver.findElement(By.xpath("//*[@data-button-action='add-to-cart']")).click();
+
+  Thread.sleep(1000);
+
+  
+
+// TakesScreenshot scrshot=(TakesScreenshot)driver;
+
+// File srcFile=scrshot.getScreenshotAs(OutputType.FILE);
+
+// FileUtils.copyFile(srcFile, "C:\\\\Users\\\\J.Siddayya swami\\\\eclipse-workspace\\\\Selenium_SBA\\\\marshall.png");
+
+// driver.findElement(By.xpath("//*[@class='btn btn-primary btn-block btn-lg mb-2'][2]")).click();
+
+  driver.navigate().back();
+
+  Thread.sleep(1000);
+
+  driver.navigate().back();
+
+  
+
+  //print first name and price
+
+  String name=driver.findElement(By.xpath("//*[text()='Vet life dog Ultrahypo 2kg']")).getText();
+
+  String price=driver.findElement(By.xpath("//*[text()='â‚¹1,155.00']")).getText();
+
+  System.out.println("first name= "+name);
+
+  System.out.println("price= "+price);
+
+  
+
+  
+
+  //print the name of first product
+
+  String firstname=driver.findElement(By.xpath("//*[@alt='Versele Laga Junior OM NO Maize 25 Kg']")).getText();
+
+  System.out.println(firstname);
+
+  excelclass.setcellvalue("Sheet1", 0, 0, firstname);
+
+  
+
+  
+
+  
+
+  
+
+ }
+
+ @BeforeTest
+
+ public void beforeTest() {
+
+  driver=chromesetup();
+
+  driver.manage().window().maximize();
+
+ }
+
+
+
+ @AfterTest
+
+ public void afterTest() {
+
+driver.quit();
+
+ }
+
+
+
+}
+
+
+--------------------------------------------
+MObile91::___
+
+
+
+
+import org.testng.annotations.Test;
+
+import org.testng.annotations.BeforeTest;
+
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.WebDriver;
+
+import org.openqa.selenium.WebElement;
+
+import org.testng.annotations.AfterTest;
+
+
+
+public class mobile extends driversetup {
+
+ WebDriver driver;
+
+ @Test
+
+ public void search() throws InterruptedException {
+
+  //minimum and max price
+
+  WebElement min=driver.findElement(By.xpath("//*[@class='tiker_input mini_finder_input_1']"));
+
+  min.click();
+
+  min.clear();
+
+  min.sendKeys("5000");
+
+  Thread.sleep(1000);
+
+  WebElement max=driver.findElement(By.xpath("//*[@class='tiker_input mini_finder_input_2']"));
+
+  max.click();
+
+  max.clear();
+
+  max.sendKeys("10000");
+
+  Thread.sleep(1000);
+
+  
+
+  //click on find mobiles
+
+  driver.findElement(By.xpath("//*[@class='view_details_btn find_mob mini_finder_btn enabled']")).click();
+
+  Thread.sleep(1000);
+
+  
+
+  //price low to high
+
+  WebElement lth=driver.findElement(By.xpath("//*[@id='price_box']"));
+
+  lth.click();
+
+  Thread.sleep(2000);
+
+  lth.click();
+
+  Thread.sleep(1000);
+
+  String lmobile=driver.findElement(By.xpath("//*[text()='Itel Selfiepro S41']")).getText();
+
+  String lprice=driver.findElement(By.xpath("//*[text()='5,000'][1]")).getText();
+
+  Thread.sleep(1000);
+
+  System.out.println("Lowest Mobile Name= "+lmobile+" Lowest mobile price= "+lprice);
+
+  
+
+  //price high to low
+
+  Thread.sleep(1000);
+
+  lth.click();
+
+  Thread.sleep(1000);
+
+// String hmobile=driver.findElement(By.xpath("//*[@class='a2 star star_width_new']")).getText();
+
+// String hprice=driver.findElement(By.xpath("//*//*[@class='filter-grey-bar']//*[@class='filter-right']//*[text()='10,000'][1]")).getText();
+
+// Thread.sleep(1000);
+
+// System.out.println("highest Mobile Name= "+hmobile+" highest mobile price= "+hprice);
+
+//  
+
+  //logo
+
+  Thread.sleep(1000);
+
+  driver.findElement(By.xpath("//*[@class='logo']//*[@title='#1 Mobile Portal India | 91mobiles.com']")).click();
+
+  
+
+  
+
+  
+
+ }
+
+ @BeforeTest
+
+ public void beforeTest() {
+
+  driver=chromesetup();
+
+  driver.manage().window().maximize();
+
+ }
+
+
+
+ @AfterTest
+
+ public void afterTest() {
+
+  driver.quit();
+
+ }
+
+
+
+}
+
+*************************************************************************************************************************************************************************************
+
+*************************************************************************************************************************************************************************************
+
+
+
+
