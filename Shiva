@@ -1330,3 +1330,1226 @@ public class Scarching extends Drivers
 
 **********************************************************************************************************************************************
 
+Axis Bank:
+Driversetup:
+package axisbank;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://www.axisbank.com/personal/calculators/fd-monthly-investment-calculator/";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+	public WebDriver setupfirefox()
+	{
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+
+
+}
+
+Excel:
+package axisbank;
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutils {
+	public static String getCellValue(String sheetname,int rowNum,int cellNum)
+	{
+		String CellValue=null;
+		try
+		{
+			FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\testdata.xlsx");
+			XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+			XSSFSheet sheet=workbook.getSheet(sheetname);
+			XSSFRow row=sheet.getRow(rowNum);
+			XSSFCell cell=row.getCell(cellNum);
+			CellValue=cell.getStringCellValue();
+			
+			}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return CellValue;
+
+}
+}
+Search:
+package axisbank;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search extends driversetup{
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupChrome();
+		driver.manage().window().maximize();
+	}
+	@Test
+	public void search() throws Exception
+	{
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		Actions act=new Actions(driver);
+	    WebElement we=driver.findElement(By.xpath("//*[@class='input-group calctype']//*[@class='sbHolder']"));
+	    act.moveToElement(we).click().perform();
+	   Thread.sleep(2000);
+	   driver.findElement(By.xpath("//li//*[text()='Monthly Investment']")).click();
+	   Thread.sleep(2000);
+	   WebElement we1=driver.findElement(By.xpath("//*[@id='ctl00_Body_C002_txtAmount']"));
+	   we1.clear();
+	   we1.sendKeys("30000");
+	   WebElement we3=driver.findElement(By.xpath("//*[@class='inst_amt']"));
+	   act.moveToElement(we3).click().perform();
+	   String str=driver.findElement(By.xpath("//*[@class='inst_amt']")).getText();
+	   System.out.println("Interest Rate:" +str);
+	   
+	   WebElement we5=driver.findElement(By.xpath("//*[@class='culButtion clear animated_button']"));
+	   act.moveToElement(we5).click().perform();
+	   
+	   WebElement we4=driver.findElement(By.xpath("//*[@class='maturity_amt grossTotal']"));
+	   act.moveToElement(we4).click().perform();
+	   String str1=driver.findElement(By.xpath("//*[@class='maturity_amt grossTotal']")).getText();
+	   System.out.println("Maturity value:" +str1);
+	   }
+	@AfterMethod
+	public void close()
+	{
+		
+		driver.quit();
+	}
+	
+
+}
+
+Cleartrip:
+Driversetup:
+package cleartrip1;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://www.cleartrip.com/";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+	}
+	public WebDriver setupFirefox()
+	{
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(driversetup.url);
+		return driver;
+	}
+
+}
+Excel:
+package cleartrip1;
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutils {
+public static String getCellValue(String sheetname,int rowNum,int cellNum)
+{
+	String CellValue=null;
+	try
+	{
+		FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\TestData.xlsx");
+		XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+		XSSFSheet sheet=workbook.getSheet(sheetname);
+		XSSFRow row=sheet.getRow(rowNum);
+		XSSFCell cell=row.getCell(cellNum);
+		CellValue=cell.getStringCellValue();
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+	}
+	return CellValue;
+	}
+}
+Search:
+package cleartrip1;
+
+
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search extends driversetup{
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupChrome();
+		driver.manage().window().maximize();
+	}
+	@Test(priority=1)
+	public void search() throws Exception
+	{
+		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		//writetoexcel.test();
+		driver.findElement(By.xpath("//*[@id='RoundTrip']")).click();
+		WebElement we=driver.findElement(By.xpath("//*[@id='FromTag']"));
+		we.click();
+		we.sendKeys(excelutils.getCellValue("Sheet1",0,0));
+		we.sendKeys(Keys.DOWN);
+		we.sendKeys(Keys.ENTER);
+		Thread.sleep(2000);
+		WebElement we1=driver.findElement(By.xpath("//*[@id='ToTag']"));
+		we1.click();
+		we1.sendKeys(excelutils.getCellValue("Sheet1",0,1));
+		we1.sendKeys(Keys.DOWN);
+		we1.sendKeys(Keys.ENTER);
+		Thread.sleep(2000);
+		//Actions act=new Actions(driver);
+		//act.moveToElement(driver.findElement(By.xpath("//*[@id='DepartDate']")));
+		//act.build().perform();
+
+		driver.findElement(By.xpath("//*[@id='DepartDate']")).click();
+		driver.findElement(By.xpath("//div[@class='monthBlock first']//*[text()='30']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id='ReturnDate']")).click();
+		driver.findElement(By.xpath("//*[@class='monthBlock first']//*[text()='31']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id='Adults']")).click();
+		driver.findElement(By.xpath("//*[@id='Adults']//*[text()='3']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id='SearchBtn']")).click();
+		Thread.sleep(10000);
+	
+		
+        //String str=driver.findElement(By.xpath("//div[@class='colZero leg col12']//div[@class='listItem  selected']//*[@title='IndiGo']")).getText();
+		//System.out.println("first flight name" +str);
+	}
+	
+	@AfterMethod
+	public void close()
+	{
+		driver.quit();
+	}
+
+}
+Developer:
+Driversetup:
+package search;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://developer.salesforce.com/";
+	public WebDriver setupchrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+	 public WebDriver setupFirefox()
+
+     {
+
+                     WebDriver driver= new FirefoxDriver();
+
+                     driver.navigate().to(driversetup.url);
+
+                     return driver;
+
+     }
+
+
+}
+Excel:
+package search;
+
+import java.io.FileInputStream;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
+public class excelutils {
+	public static CharSequence getCellValue(String sheetname, int rowNum, int cellNum) throws Exception 
+	{
+		String cellValue=null;
+		try
+		{
+		FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\TestData.xlsx");
+		XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+		XSSFSheet sheet=workbook.getSheet(sheetname);
+		XSSFRow row=sheet.getRow(rowNum);
+		XSSFCell cell=row.getCell(cellNum);
+		cellValue=cell.getStringCellValue();
+		
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return cellValue;
+	
+	}
+
+
+	}
+
+Search:
+package search;
+
+import java.io.File;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+//import org.openqa.selenium.OutputType;
+//import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search1 extends driversetup {
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupchrome();
+		driver.manage().window().maximize();
+	}
+	@Test(priority=1)
+	public void search() throws Exception
+	{
+		driver.findElement(By.xpath("//a[@class='btn btn-success']")).click();
+		Thread.sleep(2000);
+		WebElement we=driver.findElement(By.xpath("//input[@id='email']"));
+		//we.click();
+		Thread.sleep(2000);
+		we.sendKeys(excelutils.getCellValue("Sheet1",1,0));
+		Thread.sleep(2000);
+		we.sendKeys(Keys.DOWN);
+		we.sendKeys(Keys.ENTER);
+		//String str=driver.findElement(By.xpath("//*[@id=\"deorg_form\"]/div[3]/div")).getText();
+		//System.out.println("Error Message:" +str);
+		String str=driver.findElement(By.xpath("//div[text()='Please enter a valid email address']")).getText();
+		System.out.println("Error Message:" +str);
+		WebElement we1=driver.findElement(By.xpath("//*[@id='country']"));
+		we1.sendKeys(excelutils.getCellValue("Sheet1",2,0));
+		Thread.sleep(2000);
+		we1.sendKeys(Keys.DOWN);
+		we1.sendKeys(Keys.ENTER);
+		driver.findElement(By.xpath("//*[text()='Log In']")).click();
+		driver.findElement(By.xpath("//*[@name='rememberUn']")).click();
+		}
+	@AfterMethod
+	public void close()
+	{
+		driver.quit();
+	}
+
+}
+Goibibo:
+Driversetup:
+package goibibo2;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://www.goibibo.com/";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+	public WebDriver setupfirefox()
+	{
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+
+}
+Excel:
+package goibibo2;
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutils {
+	public static String getCellValue(String sheetname,int rowNum,int cellNum)
+	{
+		String CellValue=null;
+		try
+		{
+			FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\testdata.xlsx");
+			XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+			XSSFSheet sheet=workbook.getSheet(sheetname);
+			XSSFRow row=sheet.getRow(rowNum);
+			XSSFCell cell=row.getCell(cellNum);
+			CellValue=cell.getStringCellValue();
+			
+			}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return CellValue;
+		
+		
+	}
+
+}
+Search:
+package goibibo2;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search extends driversetup {
+WebDriver driver;
+@BeforeMethod
+public void test()
+{
+	driver=setupChrome();
+	driver.manage().window().maximize();
+}
+@Test(priority=1)
+public void search() throws InterruptedException
+{
+	driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+	driver.findElement(By.id("roundTrip")).click();
+	WebElement we=driver.findElement(By.xpath("//*[@id='gosuggest_inputSrc']"));
+	we.click();
+	we.sendKeys(excelutils.getCellValue("Sheet1",0,0));
+	Thread.sleep(2000);
+	we.sendKeys(Keys.DOWN);
+	we.sendKeys(Keys.ENTER);
+	WebElement we1=driver.findElement(By.xpath("//*[@id='gosuggest_inputDest']"));
+	we1.click();
+	we1.sendKeys(excelutils.getCellValue("Sheet1",0,1));
+	Thread.sleep(2000);
+	we1.sendKeys(Keys.DOWN);
+	we1.sendKeys(Keys.ENTER);
+	driver.findElement(By.id("departureCalendar")).click();
+	driver.findElement(By.xpath("//*[text()='30']")).click();
+	driver.findElement(By.id("returnCalendar")).click();
+	driver.findElement(By.xpath("//*[text()='31']")).click();
+	driver.findElement(By.xpath("//*[text()='1 Traveller, ']")).click();
+	driver.findElement(By.xpath("//div[@class='number-spinner number-spinnerFil']//*[@class='fl plusSpin brdrTpBtmRt']")).click();
+	driver.findElement(By.xpath("//*[@id='gi_class']/option[1]")).click();
+	driver.findElement(By.xpath("//*[@value='Search']")).click();
+	Thread.sleep(2000);
+	String str=driver.findElement(By.xpath("//span[@class='db greyLt ico11 padT3'][1]")).getText();
+	//System.out.println("first flight name:" +str);
+}
+@AfterMethod
+public void close()
+{
+	driver.quit();
+}
+}
+
+ICICI Bank:
+Driversetup:
+package icicibank;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+
+
+public class driversetup {
+	public static String url="https://www.icicibank.com/calculators/fd-calculator.html";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+	}
+	public WebDriver setupFirefox()
+	{
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(driversetup.url);
+		return driver;
+	}
+
+}
+Excel:
+package icicibank;
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutils {
+	public static String getCellValue(String sheetname,int rowNum,int cellNum)
+	{
+		String CellValue=null;
+		try
+		{
+			FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\TestData.xlsx");
+			XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+			XSSFSheet sheet=workbook.getSheet(sheetname);
+			XSSFRow row=sheet.getRow(rowNum);
+			XSSFCell cell=row.getCell(cellNum);
+			CellValue=cell.getStringCellValue();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return CellValue;
+		}
+
+}
+Search:
+package icicibank;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search extends driversetup {
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupChrome();
+		driver.manage().window().maximize();
+	}
+@Test(priority=1)
+public void search() throws Exception
+{
+	driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	//Select se=new Select(driver.findElement(By.xpath("//*[@id='ddlTypeOfFixedDeposit']")));
+	//se.selectByVisibleText("Quarterly Payout");
+	
+	driver.switchTo().frame("paymframe");
+	Actions act=new Actions(driver);
+	driver.findElement(By.xpath("//*[@id='ddlTypeOfFixedDeposit']")).click();
+	driver.findElement(By.xpath("//option[@id='quarterly_payout']")).click();
+	WebElement we=driver.findElement(By.xpath("//*[@id='loanAmount']"));
+	we.clear();
+	Thread.sleep(2000);
+	we.sendKeys("60000");
+	String str=driver.findElement(By.xpath("//span[@id='spnMaturityValue']")).getText();
+	System.out.println("maturity value1:" +str);
+	String str1=driver.findElement(By.xpath("//*[@id='spnAIAmount']")).getText();
+	System.out.println("aggregate interest value1:" +str1);
+	driver.findElement(By.xpath("//input[@id='idDays']")).click();
+	WebElement we1=driver.findElement(By.xpath("//input[@class='textBox depositamt sliderText1' and @id='tenureDay']"));
+	we1.clear();
+	Thread.sleep(2000);
+	we1.sendKeys("1000");
+	String str2=driver.findElement(By.xpath("//span[@id='spnMaturityValue']")).getText();
+	System.out.println("maturity value:" +str2);
+	String str3=driver.findElement(By.xpath("//*[@id='spnAIAmount']")).getText();
+	System.out.println("aggregate interest value:" +str3);
+	driver.switchTo().parentFrame();
+	WebElement logo=driver.findElement(By.xpath("//a[@class='Logo']"));
+	act.moveToElement(logo).click().perform();
+	
+}
+@AfterMethod
+public void close()
+{
+	driver.quit();
+}
+}
+
+Makemytrip:
+Driversetup:
+package makemytrip;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://www.makemytrip.com/flights/";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+	public WebDriver setupfirefox()
+	{
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+
+
+}
+Excel:
+package makemytrip;
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutils {
+	public static String getCellValue(String sheetname,int rowNum,int cellNum)
+	{
+		String CellValue=null;
+		try
+		{
+			FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\testdata.xlsx");
+			XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+			XSSFSheet sheet=workbook.getSheet(sheetname);
+			XSSFRow row=sheet.getRow(rowNum);
+			XSSFCell cell=row.getCell(cellNum);
+			CellValue=cell.getStringCellValue();
+			
+			}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return CellValue;
+	}
+
+
+}
+Search:
+
+package makemytrip;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search extends driversetup{
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupChrome();
+	}
+	@Test
+	public void search() throws Exception
+	{	
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
+		driver.findElement(By.xpath("//*[text()='Round Trip']")).click();
+		driver.findElement(By.xpath("//*[@id='fromCity']")).click();
+		
+		Thread.sleep(2000);
+		WebElement we=driver.findElement(By.xpath("//*[@placeholder='From']"));
+		we.sendKeys("coimbatore");
+		Thread.sleep(2000);
+		we.sendKeys(Keys.DOWN);
+		we.sendKeys(Keys.ENTER);
+		
+		WebElement we1=driver.findElement(By.xpath("//*[@id='toCity']"));
+        JavascriptExecutor js=(JavascriptExecutor)driver;
+		js.executeScript("arguments[0].click();", we1);
+		
+		Thread.sleep(2000);
+		WebElement we2=driver.findElement(By.xpath("//*[@placeholder='To']"));
+		we2.sendKeys("indore");
+		Thread.sleep(2000);
+		we2.sendKeys(Keys.DOWN);
+		we2.sendKeys(Keys.ENTER);
+		WebElement we3=driver.findElement(By.xpath("//*[@for='departure']"));
+		js.executeScript("arguments[0].click();", we3);
+		
+		driver.findElement(By.xpath("//*[@aria-label='Mon Dec 30 2019']")).click();
+		
+		
+		WebElement we5=driver.findElement(By.xpath("//*[@for='return']"));
+		js.executeScript("arguments[0].click();", we5);
+		
+		WebElement we6=driver.findElement(By.xpath("//*[@aria-label='Tue Dec 31 2019']"));
+		js.executeScript("arguments[0].click();", we6);
+		
+		driver.findElement(By.xpath("//*[@class='primaryBtn font24 latoBlack widgetSearchBtn ']")).click();
+		
+	}
+	@AfterMethod
+	public void close()
+	{
+		driver.quit();
+	}
+
+}
+
+Marshallspetzone:
+Driversetup:
+package marshallspetzone;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://www.marshallspetzone.com/";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+	public WebDriver setupfirefox()
+	{
+		
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+
+}
+Excel:
+package marshallspetzone;
+
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutils {
+	public static String getCellValue(String sheetname,int rowNum,int cellNum)
+	{
+		String CellValue=null;
+		try
+		{
+			FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\TestData.xlsx");
+			XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+			XSSFSheet sheet=workbook.getSheet(sheetname);
+			XSSFRow row=sheet.getRow(rowNum);
+			XSSFCell cell=row.getCell(cellNum);
+			CellValue=cell.getStringCellValue();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return CellValue;
+	}
+	
+
+}
+Search:
+package marshallspetzone;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search extends driversetup {
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupChrome();
+		driver.manage().window().maximize();
+	}
+	@Test(priority=1)
+	public void search() throws Exception
+	{
+		driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		Actions act=new Actions(driver);
+		driver.findElement(By.xpath("//li[@class='cbp-hrmenu-tab cbp-hrmenu-tab-13  cbp-has-submeu']")).click();
+		driver.findElement(By.xpath("//*[@id='left-column']//*[text()='Accessories']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@class='select-title expand-more form-control']//*[@class='fa fa-angle-down']")).click();
+		driver.findElement(By.xpath("//*[@class='dropdown-menu']//a[4]")).click();
+		String str=driver.findElement(By.xpath("//*[@class='h3 product-title']//a[text()='Pawzone Anti-Slip Spliced Flooring For Pets']")).getText();
+		System.out.println("first lowest price of product is:" +str);
+		String str1=driver.findElement(By.xpath("//*[@content='148.2']")).getText();
+		System.out.println("price:" +str1);
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@class='select-title expand-more form-control']//*[@class='fa fa-angle-down']")).click();
+		driver.findElement(By.xpath("//*[@class='dropdown-menu']//a[5]")).click();
+		String str2=driver.findElement(By.xpath("//*[@class='h3 product-title']//*[text()='Savic Andes 7 Pet Carrier 39x27x32 inches']")).getText();
+		System.out.println("first highest price of product is:" +str2);
+		String str3=driver.findElement(By.xpath("//*[@content='15200']")).getText();
+		System.out.println("price:" +str3);
+		Thread.sleep(2000);
+		//WebElement list=driver.findElement(By.xpath("//*[@class='fa fa-th-list']"));
+		//JavascriptExecutor js=(JavascriptExecutor)driver;
+		//js.executeScript(list);
+		//js.executeScript("driver.findElement(By.xpath(\"//*[@class='col col-auto col-header-left']//div[@id='desktop_logo']\"))")
+		WebElement we3=driver.findElement(By.xpath("//*[@class=' js-search-link']"));
+		act.moveToElement(we3).click().perform();
+		Thread.sleep(2000);
+		WebElement we4=driver.findElement(By.xpath("//*[@class='col col-auto col-header-left']//div[@id='desktop_logo']"));
+		act.moveToElement(we4).click().perform();
+	}
+	@AfterMethod
+	public void close()
+	{
+		driver.quit();
+	}
+
+}
+
+Mobiles:
+Driversetup:
+package mobile1;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://www.91mobiles.com/";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+	public WebDriver setupFirefox()
+	{
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+
+}
+Excel:
+package mobile1;
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutiles {
+	public static String getCellString(String sheetname,int rowNum,int cellNum)
+	{
+		String CellValue=null;
+		try
+	{
+		FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\TestData.xlsx");
+		XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+		XSSFSheet sheet=workbook.getSheet(sheetname);
+		XSSFRow row=sheet.getRow(rowNum);
+		XSSFCell cell=row.getCell(cellNum);
+		CellValue=cell.getStringCellValue();
+	}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return CellValue;
+}
+}
+Search:
+package mobile1;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search extends driversetup{
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupChrome();
+		driver.manage().window().maximize();
+	}
+	@Test(priority=1)
+	public void search() throws Exception
+		{
+		driver.findElement(By.xpath("//*[@class='tiker_input mini_finder_input_1']")).clear();
+		driver.findElement(By.xpath("//*[@class='tiker_input mini_finder_input_1']")).sendKeys("5000");
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@class='tiker_input mini_finder_input_2']")).clear();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@class='tiker_input mini_finder_input_2']")).sendKeys("10000");
+		driver.findElement(By.xpath("//*[@class='view_details_btn find_mob mini_finder_btn enabled']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id='price_box']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id='price_box']")).click();
+		Thread.sleep(2000);
+		String str=driver.findElement(By.xpath("//*[text()='Itel A22']")).getText();
+		System.out.println("minimumprice of product is:"+str);
+		String str1=driver.findElement(By.xpath("//*[@id=\"finderResults\"]/span/div[4]/div[1]/div[2]/div[2]/div/span")).getText();
+		System.out.println("price of product is:"+str1);
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//*[@id='price_box']")).click();
+		Thread.sleep(2000);
+		String str3=driver.findElement(By.xpath("//*[text()='Spice Stellar 439']")).getText();
+		System.out.println("maximumprice of product is:"+str3);
+		String str4=driver.findElement(By.xpath("//*[@id=\"finderResults\"]/span/div[4]/div[1]/div[2]/div[2]/div/span")).getText();
+		System.out.println("price of product is:"+str4);
+		driver.findElement(By.xpath("(//*[@title='#1 Mobile Portal India | 91mobiles.com'])[1]")).click();
+		}
+		@AfterMethod
+		public void close()
+		{
+			driver.quit();
+		}
+	}
+
+Savaari:
+Driversetup:
+package savari1;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://www.savaari.com";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+	public WebDriver setupfirefox()
+	{
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+
+}
+Excel:
+package savari1;
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutils {
+	public static String getCellValue(String sheetname,int rowNum,int cellNum)
+	{
+		String CellValue=null;
+		try
+		{
+			FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\testdata.xlsx");
+			XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+			XSSFSheet sheet=workbook.getSheet(sheetname);
+			XSSFRow row=sheet.getRow(rowNum);
+			XSSFCell cell=row.getCell(cellNum);
+			CellValue=cell.getStringCellValue();
+			
+			}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return CellValue;
+	}
+
+}
+Search:
+package savari1;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+
+
+public class search extends driversetup{
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupChrome();
+	}
+	@Test
+	public void search() throws Exception
+	{
+		Actions act=new Actions(driver);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.findElement(By.xpath("//*[@class='margin-left-20px']")).click();
+		WebElement we=driver.findElement(By.xpath("//*[@id='fromCityList']"));
+		we.sendKeys("Mumbai");
+		Thread.sleep(2000);
+		we.sendKeys(Keys.DOWN);
+		we.sendKeys(Keys.ENTER);
+		
+		WebElement we1=driver.findElement(By.xpath("//*[@class='col-10 col tocityHolder']//input"));
+		we1.sendKeys("Pune");
+		Thread.sleep(2000);
+		//we1.sendKeys(Keys.DOWN);
+		we1.sendKeys(Keys.ENTER);
+		driver.findElement(By.xpath("//*[@class='ng-tns-c11-1 form-control ui-inputtext ui-widget ui-state-default ui-corner-all']")).click();
+		driver.findElement(By.xpath("//*[text()='30']")).click();
+		driver.findElement(By.xpath("//*[@id='pickUpTime']")).click();
+		driver.findElement(By.xpath("//*[@id='pickUpTime']//option[3]")).click();
+		driver.findElement(By.xpath("//*[@class='book-button btn']")).click();
+		Thread.sleep(5000);
+		List<WebElement>carname=driver.findElements(By.xpath("//*[@class='carBlockFirst']"));
+		for(int i=0;i<2;i++)
+		{
+			System.out.println(carname.get(i).getText());
+		}
+		List<WebElement>regularPrice=driver.findElements(By.xpath("//*[@class='regularPrice']"));
+		for(int i=0;i<2;i++)
+		{
+			System.out.println(regularPrice.get(i).getText());
+		}
+	}
+	@AfterMethod
+	public void close()
+	{
+	driver.quit();
+	}
+
+}
+
+INDIGO:
+driversetup:
+package indigo1;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class driversetup {
+	public static String url="https://www.goindigo.in/";
+	public WebDriver setupChrome()
+	{
+		System.setProperty("webdriver.chrome.driver","C:\\selenium code\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.navigate().to(url);
+		return driver;
+		
+	}
+	public WebDriver setupFirefox()
+	{
+		WebDriver driver=new FirefoxDriver();
+		driver.navigate().to(url);
+		return driver;
+}
+}
+Excel:
+package indigo1;
+
+import java.io.FileInputStream;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class excelutils {
+	public static String getCellValue(String sheetname,int rowNum,int cellNum)
+	{
+		String CellValue=null;
+		try
+	{
+		FileInputStream excelfile=new FileInputStream("C:\\mounikaexcel\\TestData.xlsx");
+		XSSFWorkbook workbook=new XSSFWorkbook(excelfile);
+		XSSFSheet sheet=workbook.getSheet(sheetname);
+		XSSFRow row=sheet.getRow(rowNum);
+		XSSFCell cell=row.getCell(cellNum);
+		CellValue=cell.getStringCellValue();
+	}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return CellValue;
+}
+}
+
+Search:
+package indigo1;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class search extends driversetup {
+	WebDriver driver;
+	@BeforeMethod
+	public void test()
+	{
+		driver=setupChrome();
+	}
+	@Test(priority=1)
+	public void search() throws Exception
+	{
+		Actions act=new Actions(driver);
+		driver.findElement(By.xpath("//*[@for='roundTrip']")).click();
+		WebElement we=driver.findElement(By.name("or-src"));
+		we.click();
+		we.sendKeys(excelutils.getCellValue("Sheet1",3,0));
+		Thread.sleep(2000);
+		//we.sendKeys(Keys.DOWN);
+		we.sendKeys(Keys.ENTER);
+		WebElement we1=driver.findElement(By.name("or-dest"));
+		we1.sendKeys(excelutils.getCellValue("sheet1",3, 1));
+		Thread.sleep(2000);
+		//we1.sendKeys(Keys.DOWN);
+		we1.sendKeys(Keys.ENTER);
+		driver.findElement(By.xpath("//*[@class='form-control or-depart igInitCalendar focus']")).click();
+		driver.findElement(By.xpath("//*[@class=' ui-datepicker-week-end ']//*[text()='21']")).click();
+		driver.findElement(By.xpath("//*[@class='form-control or-return igInitCalendar focus']")).click();
+		driver.findElement(By.xpath("//div[@class='ui-datepicker-group ui-datepicker-group-first']//*[text()='23']")).click();
+		driver.findElement(By.name("passenger")).click();
+		driver.findElement(By.xpath("//*[@class='passenger-dropdown pax-selection-row']//*[@class='adult-pax-list']//*[@class='pax-plus btn btn-info']")).click();
+		//Select sc=new Select(driver.findElement(By.xpath("//*[@class='dropdown bootstrap-select form-control bw-currency-list']//*[@class='filter-option-inner-inner']")));
+		//sc.selectByVisibleText("Indian Rupees");
+		
+		WebElement we3=driver.findElement(By.xpath("//*[@type='submit']//*[text()='Search Flight']"));
+		act.moveToElement(we3).click().perform();
+		
+		
+	}
+	@AfterMethod
+	public void close()
+	{
+		driver.quit();
+	}
+
+
+	
+	
+	}
+
+---------------------------------
+
+
+
+
+
+
+
+
+
+
+
